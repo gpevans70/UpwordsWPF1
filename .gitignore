@@ -1,0 +1,7 @@
+*.suo
+*.user
+
+.vs
+
+UpwordsWPF1/obj
+UpwordsWPF1/bin

@@ -1,0 +1,428 @@
+﻿<Window x:Class="UpwordsWPF1.View.UpwordsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UpwordsWPF1.View"
+        xmlns:ViewModelNS="clr-namespace:UpwordsWPF1.ViewModel"
+        mc:Ignorable="d"
+        Title="Upwords Game" MinHeight="590" MinWidth="780" SizeToContent="WidthAndHeight"  >
+
+    <Window.Resources>
+        <ViewModelNS:Controller x:Key="ViewModelKEY"/>
+        <ViewModelNS:UIStateConvertor1 x:Key="UIStateConvertor1KEY"/>
+        <BooleanToVisibilityConverter x:Key="booltoVis"/>
+    </Window.Resources>
+
+    <!--<Window.DataContext>
+        {StaticResource ResourceKey="ViewModelKEY"}
+    </Window.DataContext>-->
+
+    <!--<Grid DataContext="{StaticResource ResourceKey=ViewModelKEY}">-->
+
+
+    <!--SizeToContent="WidthAndHeight"-->
+
+    <Grid Margin="0,0,0,0" MinHeight="590" MinWidth="780">
+
+        <TabControl x:Name="MainWindowTabControl" MinHeight="590" MinWidth="780" HorizontalAlignment="Stretch"  Margin="0,0,0,0" VerticalAlignment="Top" 
+                    DataContext="{StaticResource ResourceKey=ViewModelKEY}">
+
+            <!--Tab Game Setup (Tab 1)-->
+            <TabItem x:Name="T1" Header="Game Setup" FontSize="14"  
+                     IsEnabled="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T1_Tab}" IsEnabledChanged="Tab1IsEnabledChanged">
+
+                <Grid Background="#FFE5E5E5" Margin="10,10,10,10" DataContext="{StaticResource ResourceKey=ViewModelKEY}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name = "T1_Continue" Content="Continue" FontSize="14"
+                            IsEnabled="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T1_Continue}" 
+                            HorizontalAlignment="Center" Height="26" Margin="20,480,0,0" VerticalAlignment="Top" Width="180" 
+                            Grid.Column="1" 
+                            Click="T1Continue"/>
+
+                    <StackPanel>
+                        <GroupBox Margin="10" Header="Player 1" FontSize="14" BorderThickness="2" >
+                            <StackPanel>
+                                <RadioButton x:Name="P1_Human" Content="Human" HorizontalAlignment="Left" Margin="20,20,10,0" GroupName="Presets" IsEnabled="False" IsChecked="True"/>
+                                <RadioButton x:Name="P1_Computer" Content="Computer" HorizontalAlignment="Left" Margin="20,20,10,0" GroupName="Presets" IsEnabled="False"/>
+
+                                <Label Content="Name:" Margin="20,20,10,0" VerticalAlignment="Center"/>
+                                <TextBox Text="Player 1 name" Height="30" Margin="20,0,10,20" VerticalAlignment="Center"/>
+
+                            </StackPanel>
+                        </GroupBox>
+
+                        <GroupBox Margin="10" Header="Player 2" FontSize="14" BorderThickness="2"  >
+                            <StackPanel >
+                                <RadioButton x:Name="P2_Human" Content="Human" HorizontalAlignment="Left" Margin="20,20,10,0" Height="21" Width="148" IsEnabled="False" GroupName="Solving" Grid.ColumnSpan="2"/>
+                                <RadioButton x:Name="P2_Computer" Content="Computer" HorizontalAlignment="Left" Margin="20,20,10,0" Height="17" Width="180" IsChecked="True" GroupName="Solving" Grid.ColumnSpan="2"/>
+
+                                <Label Content="Name:" Margin="20,20,10,0" VerticalAlignment="Center"/>
+                                <TextBox Text="Player 2 name" Height="30" Margin="20,0,10,20" VerticalAlignment="Center"/>
+
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <!--Score Sheet (Tab 2)-->
+            <TabItem x:Name="T2" Header="Score Sheet" FontSize="14"  
+                     IsEnabled="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T2_Tab}" IsEnabledChanged="Tab1IsEnabledChanged">
+                <Grid Background="#FFE5E5E5" Margin="10,10,10,10" ShowGridLines="True">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="Auto" MinHeight="20"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="Auto" MinHeight="20"/>
+                        <RowDefinition Height="Auto" MinHeight="20"/>
+                        <RowDefinition Height="Auto" MinHeight="20"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="156" />
+                        <ColumnDefinition Width="434" />
+                        <ColumnDefinition Width="150"/>
+                        <!--<ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto" />-->
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name = "T2_Continue" Content="Continue" 
+                            IsEnabled="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T2_Continue}" 
+                            HorizontalAlignment="Left" Height="26" Margin="0,0,0,0" VerticalAlignment="Top" Width="141" 
+                            Grid.Column="2" Grid.Row="2" 
+                            Click="T2Continue" Grid.RowSpan="2"/>
+                </Grid>
+            </TabItem>
+
+            <!--Tab Board (Tab 3)-->
+            <TabItem x:Name="T3" Header="Board" FontSize="14"  
+                     IsEnabled="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T3_Tab}" IsEnabledChanged="Tab1IsEnabledChanged">
+                <Grid x:Name="BoardLayoutGrid" Margin="10,10,10,10" ShowGridLines="True" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="400"/>
+                        <RowDefinition Height="150"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="440" />
+                        <ColumnDefinition Width="150" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.Resources>
+                        <!--<BooleanToVisibilityConverter x:Key="booltoVis"/>-->
+
+                        <Style x:Key="labelStyleC" TargetType="Label" >
+                            <Setter Property="BorderBrush" Value="Black" />
+                            <Setter Property="BorderThickness" Value="2 "/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                        <Style x:Key="labelStyleR" TargetType="Label" >
+                            <Setter Property="BorderBrush" Value="Black" />
+                            <Setter Property="BorderThickness" Value="2 "/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                        <Style x:Key="labelStyleT" TargetType="Label" >
+                            <Setter Property="Width" Value="30" />
+                            <Setter Property="Background" Value="White"/>
+                            <Setter Property="BorderBrush" Value="Black" />
+                            <Setter Property="BorderThickness" Value="2 "/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+
+                    </Grid.Resources>
+
+                    <Label x:Name="label" Content="Player" Grid.Row ="1" Grid.Column="0" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14"  />
+                    <RadioButton x:Name="Thinking" Content="Thinking" Grid.Row ="2" Grid.Column="0" GroupName="BoardMode"
+                                 IsEnabled="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T3_Thinking_Enabled}" 
+                                 IsChecked="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T3_Thinking_Checked,Mode=OneWay}" 
+                                 HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" FontSize="14" Checked="SelectThinking"/>
+                    <RadioButton x:Name="Play" Content="Play to board" Grid.Row ="2" Grid.Column="0" GroupName="BoardMode" 
+                                 IsEnabled="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T3_Play_Enabled}" 
+                                 HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Height="20" Margin="10,50,0,0" FontSize="14" Padding="4,0,0,0" Checked="SelectPlay" />
+
+                    <!--Label.MouseDown is adding an "Attached event" - see WPF 4.5 Unleashed p148-->
+                    <Grid 
+                        Label.MouseDown="OnMainBoardPressed" 
+                        x:Name="PuzzleGrid" Grid.Row ="1" Grid.Column="1" Background="White" Margin="0,32,0,0" IsSharedSizeScope="True" HorizontalAlignment="Left" VerticalAlignment="Top"  Height="330" Width="327" ShowGridLines="True" >
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="28" SharedSizeGroup ="PuzzleRows" />
+                            <RowDefinition SharedSizeGroup ="PuzzleRows" />
+                            <RowDefinition SharedSizeGroup ="PuzzleRows" />
+                            <RowDefinition SharedSizeGroup ="PuzzleRows" />
+                            <RowDefinition SharedSizeGroup ="PuzzleRows" />
+                            <RowDefinition SharedSizeGroup ="PuzzleRows" />
+                            <RowDefinition SharedSizeGroup ="PuzzleRows" />
+                            <RowDefinition SharedSizeGroup ="PuzzleRows" />
+                            <RowDefinition SharedSizeGroup ="PuzzleRows" />
+                            <RowDefinition SharedSizeGroup ="PuzzleRows" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30" />
+                            <ColumnDefinition Width="28" SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label x:Name="labelC1" Grid.Row="0" Grid.Column="1" Content="a" Style="{StaticResource labelStyleC}"/>
+                        <Label x:Name="labelC2" Grid.Row="0" Grid.Column="2" Content="b" Style="{StaticResource labelStyleC}"/>
+                        <Label x:Name="labelC3" Grid.Row="0" Grid.Column="3" Content="c" Style="{StaticResource labelStyleC}"/>
+                        <Label x:Name="labelC4" Grid.Row="0" Grid.Column="4" Content="d" Style="{StaticResource labelStyleC}"/>
+                        <Label x:Name="labelC5" Grid.Row="0" Grid.Column="5" Content="e" Style="{StaticResource labelStyleC}"/>
+                        <Label x:Name="labelC6" Grid.Row="0" Grid.Column="6" Content="f" Style="{StaticResource labelStyleC}"/>
+                        <Label x:Name="labelC7" Grid.Row="0" Grid.Column="7" Content="g" Style="{StaticResource labelStyleC}"/>
+                        <Label x:Name="labelC8" Grid.Row="0" Grid.Column="8" Content="h" Style="{StaticResource labelStyleC}"/>
+                        <Label x:Name="labelC9" Grid.Row="0" Grid.Column="9" Content="j" Style="{StaticResource labelStyleC}"/>
+                        <Label x:Name="labelC10" Grid.Row="0" Grid.Column="10" Content="k" Style="{StaticResource labelStyleC}"/>
+
+                        <Label x:Name="labelR1" Grid.Row="1" Grid.Column="0" Content="1" Style="{StaticResource labelStyleR}"/>
+                        <Label x:Name="labelR2" Grid.Row="2" Grid.Column="0" Content="2" Style="{StaticResource labelStyleR}"/>
+                        <Label x:Name="labelR3" Grid.Row="3" Grid.Column="0" Content="3" Style="{StaticResource labelStyleR}"/>
+                        <Label x:Name="labelR4" Grid.Row="4" Grid.Column="0" Content="4" Style="{StaticResource labelStyleR}"/>
+                        <Label x:Name="labelR5" Grid.Row="5" Grid.Column="0" Content="5" Style="{StaticResource labelStyleR}"/>
+                        <Label x:Name="labelR6" Grid.Row="6" Grid.Column="0" Content="6" Style="{StaticResource labelStyleR}"/>
+                        <Label x:Name="labelR7" Grid.Row="7" Grid.Column="0" Content="7" Style="{StaticResource labelStyleR}"/>
+                        <Label x:Name="labelR8" Grid.Row="8" Grid.Column="0" Content="8" Style="{StaticResource labelStyleR}"/>
+                        <Label x:Name="labelR9" Grid.Row="9" Grid.Column="0" Content="9" Style="{StaticResource labelStyleR}"/>
+                        <Label x:Name="labelR10" Grid.Row="10" Grid.Column="0" Content="10" Style="{StaticResource labelStyleR}"/>
+
+                    </Grid>
+
+                    <!--MouseDown="BoardRack0MouseDown" 
+                                Button.Click ="BoardRack0MouseDown"-->
+
+                    <StackPanel Label.MouseDown="OnBoardRackPressed" x:Name="BoardRack" Grid.Column="1" HorizontalAlignment="Left" Height="30" Margin="30,0,0,0" Grid.Row="2" VerticalAlignment="Top" Width="299" 
+                                Orientation="Horizontal" Background="#FFF0FB06" MinWidth="300" MinHeight="30">
+
+                    </StackPanel>
+
+                    <Button x:Name="T3_Continue" Content="Continue" 
+                            Grid.Row="2" Grid.Column="2" 
+                            HorizontalAlignment="Left" Margin="25,32,0,0" Width="100"  Height="40" VerticalAlignment="Top" 
+                            IsEnabled="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T3_Continue}"                             
+                            Click="T3Continue"/>
+
+                    <TextBlock x:Name="textBlockThinking" Grid.Column="2" HorizontalAlignment="Left" Margin="20,20,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" 
+                               Visibility="{Binding ElementName=Thinking, Path=IsChecked, Converter={StaticResource booltoVis}}" >
+                        <Run FontWeight="Bold">THINKING</Run>
+                        <LineBreak/><LineBreak/>You can swap tiles around on your rack by tapping/clicking one tile and then the other that you want to swap.<LineBreak/><LineBreak/>Tap/click a highlighted tile again to unhighlight it.
+                    </TextBlock>
+                    <TextBlock x:Name="textBlockPlay" Grid.Column="2" HorizontalAlignment="Left" Margin="20,20,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" 
+                               Visibility="{Binding ElementName=Play, Path=IsChecked, Converter={StaticResource booltoVis}}" >
+                        <Run FontWeight="Bold">PLAY TO BOARD</Run>
+                        <LineBreak/><LineBreak/>Tap/click a tile on your rack and then the square on the board you wish to play it to.<LineBreak/><LineBreak/>To recall a tile to your rack, tap/click it and then a space on your rack.
+                    </TextBlock>
+                </Grid>
+            </TabItem>
+
+            <!--Tab Tile Bag (Tab 4)-->
+            <TabItem x:Name="T4" Header="Tile Bag" FontSize="14"  
+                     IsEnabled="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T4_Tab}" IsEnabledChanged="Tab1IsEnabledChanged">
+
+                <Grid Label.MouseDown="TileBagPressed" x:Name="TileBagLayoutGrid" Margin="20,20,20,20" ShowGridLines="True">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="156" />
+                        <ColumnDefinition Width="434" />
+                        <ColumnDefinition Width="150"/>
+                        <!--<ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto" />-->
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.Resources>
+                        <Style x:Key="labelStyleC" TargetType="Label" >
+                            <Setter Property="BorderBrush" Value="Black" />
+                            <Setter Property="BorderThickness" Value="2 "/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                        <Style x:Key="labelStyleR" TargetType="Label" >
+                            <Setter Property="BorderBrush" Value="Black" />
+                            <Setter Property="BorderThickness" Value="2 "/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                        <Style x:Key="labelStyleT" TargetType="Label" >
+                            <Setter Property="BorderBrush" Value="Black" />
+                            <Setter Property="BorderThickness" Value="2 "/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="MinWidth" Value="30"/>
+                        </Style>
+                    </Grid.Resources>
+
+                    <Grid x:Name="TileBagGrid" Grid.Row ="1" Grid.Column="1" Background="White" Margin="60,32,0,0" IsSharedSizeScope="True" HorizontalAlignment="Left" VerticalAlignment="Top"  ShowGridLines="True" Height="280" Width="280">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="28" SharedSizeGroup ="PuzzleColumns" />
+                            <RowDefinition SharedSizeGroup ="PuzzleColumns" />
+                            <RowDefinition SharedSizeGroup ="PuzzleColumns" />
+                            <RowDefinition SharedSizeGroup ="PuzzleColumns" />
+                            <RowDefinition SharedSizeGroup ="PuzzleColumns" />
+                            <RowDefinition SharedSizeGroup ="PuzzleColumns" />
+                            <RowDefinition SharedSizeGroup ="PuzzleColumns" />
+                            <RowDefinition SharedSizeGroup ="PuzzleColumns" />
+                            <RowDefinition SharedSizeGroup ="PuzzleColumns" />
+                            <RowDefinition SharedSizeGroup ="PuzzleColumns" />
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+                            <ColumnDefinition SharedSizeGroup ="PuzzleColumns"/>
+
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+
+                    <StackPanel x:Name="LayoutRack1" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal">
+                        <Label x:Name="labelRk0" Content="Human (Player 1) rack:    " MinWidth="160"/>
+                        <StackPanel x:Name="Player1Rack" Grid.Column="1" HorizontalAlignment="Left" Height="30" Margin="0,0,0,0" Grid.Row="3" VerticalAlignment="Top" Width="210" 
+                                Orientation="Horizontal" MinHeight="30" Background="#FF041AFD">
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel x:Name="LayoutRack2" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal">
+                        <Label x:Name="labelRk1" Content="Computer (Player 2) rack:    " MinWidth="160"/>
+                        <StackPanel x:Name="Player2Rack" Grid.Column="1" HorizontalAlignment="Left" Height="30" Margin="0,0,0,0" Grid.Row="3" VerticalAlignment="Top" Width="210" 
+                                Orientation="Horizontal" MinHeight="30" Background="#FF041AFD">
+                        </StackPanel>
+                    </StackPanel>
+
+
+
+                    <TextBlock x:Name="textBlockGoFirst" Grid.Column="2" HorizontalAlignment="Left" Margin="20,20,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" 
+                               Visibility="{Binding ElementName=GoFirst, Path=IsChecked, Converter={StaticResource booltoVis}}"  >
+                        <Run FontWeight="Bold">WHO GOES FIRST?</Run>
+                        <LineBreak/><LineBreak/>Touch one tile each to go to the rack of the Human and the Computer.<LineBreak/><LineBreak/>.......
+                    </TextBlock>
+
+                    <TextBlock x:Name="textBlockComputerTiles" Grid.Column="2" HorizontalAlignment="Left" Margin="20,20,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" 
+                               Visibility="{Binding ElementName=ComputerTiles, Path=IsChecked, Converter={StaticResource booltoVis}}"  >
+                        <Run FontWeight="Bold">COMPUTER NEEDS TILES</Run>
+                        <LineBreak/><LineBreak/>Touch tile(s) to go to the rack of the Computer until there are seven.<LineBreak/><LineBreak/>(or no more left)
+                    </TextBlock>
+
+                    <TextBlock x:Name="textBlockHumanTiles" Grid.Column="2" HorizontalAlignment="Left" Margin="20,20,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" 
+                               Visibility="{Binding ElementName=HumanTiles, Path=IsChecked, Converter={StaticResource booltoVis}}"  >
+                        <Run FontWeight="Bold">HUMAN NEEDS TILES</Run>
+                        <LineBreak/><LineBreak/>Touch tile(s) to go to the rack of the Human until there are seven.<LineBreak/><LineBreak/>(or no more left)
+                    </TextBlock>
+
+                    <RadioButton x:Name="GoFirst" Content="Go First" Grid.Row ="3" Grid.Column="0" GroupName="BagMode"
+                                 IsChecked="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T4_GoFirst,Mode=OneWay}" 
+                                 HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" IsEnabled="True" FontSize="14" Height="20" Width="73"/>
+
+                    <RadioButton x:Name="GoFirstTryAgain" Content="Go First Try Again" Grid.Row ="2" Grid.Column="2" GroupName="BagMode"
+                                 IsChecked="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T4_GoFirstTryAgain,Mode=OneWay}" 
+                                 HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" IsEnabled="True" FontSize="10" Height="20" Width="120"/>
+                    <RadioButton x:Name="GoFirstHuman" Content="Go First Human" Grid.Row ="3" Grid.Column="2" GroupName="BagMode"
+                                 IsChecked="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T4_GoFirstHuman,Mode=OneWay}" 
+                                 HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" IsEnabled="True" FontSize="10" Height="20" Width="120"/>
+                    <RadioButton x:Name="GoFirstComputer" Content="Go First Computer" Grid.Row ="4" Grid.Column="2" GroupName="BagMode"
+                                 IsChecked="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T4_GoFirstComputer,Mode=OneWay}" 
+                                 HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" IsEnabled="True" FontSize="10" Height="20" Width="120"/>
+
+                    <RadioButton x:Name="ComputerTiles" Content="Computer Tiles" Grid.Row ="4" Grid.Column="0" GroupName="BagMode"
+                                 IsChecked="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T4_ComputerTiles,Mode=OneWay}"                                  
+                                 IsEnabled="True" HorizontalAlignment="Left" VerticalAlignment="Top" Width="136" Height="20" Margin="10,0,0,0" FontSize="14" Padding="4,0,0,0" />
+                    <RadioButton x:Name="HumanTiles" Content="Human Tiles" Grid.Row ="5" Grid.Column="0" GroupName="BagMode"
+                                 IsChecked="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T4_HumanTiles,Mode=OneWay}"                                    
+                                 IsEnabled="True" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Height="20" Margin="10,10,0,0" FontSize="14" Padding="4,0,0,0" />
+
+                    <Button x:Name = "T4_Continue" Content="Continue" 
+                            IsEnabled="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T4_Continue}" 
+                            HorizontalAlignment="Left" Height="26" Margin="0,0,0,0" VerticalAlignment="Top" Width="130" 
+                            Grid.Column="2" Grid.Row="5" 
+                            Click="T4Continue"/>
+
+                    <Label x:Name="OutcomeLabel" 
+                           Grid.Column="1" Grid.Row="7" Content="Outcome Label" Visibility="Hidden"
+                           />
+
+                </Grid>
+            </TabItem>
+
+            <!--Tab Save/Exit (Tab 5)-->
+            <TabItem x:Name="T5" Header="Save/Exit" FontSize="14"  
+                     IsEnabled="{Binding GameState, Converter={StaticResource UIStateConvertor1KEY}, ConverterParameter=T5_Tab}" IsEnabledChanged="Tab1IsEnabledChanged">
+                <Grid Background="#FFE5E5E5" Margin="0,1,20,19">
+                    <StackPanel x:Name="TestRack" HorizontalAlignment="Left" Height="74" Margin="311,43,0,0" VerticalAlignment="Top" Width="337"  >
+                        <StackPanel.Resources>
+                            <Style x:Key="TileStyle" TargetType="{x:Type Control}">
+                                <Setter Property="Margin" Value="5" />
+                                <Setter Property="Background" Value="White" />
+                                <Setter Property="BorderThickness"  Value="2"></Setter>
+                                <Setter Property="BorderBrush"  Value="Red"></Setter>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="Width" Value="30" />
+
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Value}" Value="-">
+                                        <Setter Property="Background" Value="Red"></Setter>
+                                    </DataTrigger>                                    
+                                </Style.Triggers>
+                                
+                            </Style>
+                            
+                            
+                            
+                        </StackPanel.Resources>
+                        <ListBox x:Name="ListBox" HorizontalAlignment="Left" Height="62" Margin="19,0,0,0" Width="299"
+                                                             ItemsSource = "{Binding TestRack3}" 
+                                 ItemContainerStyle="{StaticResource TileStyle}"
+                                 >
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                    </StackPanel>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label>                                        
+                                        
+                                    </Label>
+                                </DataTemplate>                                                             
+                            </ListBox.ItemTemplate>
+                            
+                        </ListBox>
+                    </StackPanel>
+                    <!--<TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="176,169,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>-->
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</Window>
